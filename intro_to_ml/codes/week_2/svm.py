@@ -1,0 +1,31 @@
+import numpy as np
+from sklearn import datasets
+from sklearn import svm
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+
+# Reading iris classification data
+iris = datasets.load_iris()
+X = iris.data
+X = X[:, ::2]
+Y = iris.target
+
+np.random.seed(29)
+
+# In the datasets, 2/3 is used as the training set and 1/3 as the test sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.33)
+svm_clf = svm.SVC(kernel = 'linear', C = 1, gamma = 'auto')
+svm_clf = svm_clf.fit(X_train, Y_train)
+Y_predict = svm_clf.predict(X_test)
+score = accuracy_score(Y_test, Y_predict)
+print("Prediction accuracy of iris class:", score)
+
+# Creates comparison plot to visualize how well ML model performed on the Iris dataset.
+plt.figure(figsize = (6, 6))
+colmap = np.array(['blue', 'green', 'red'])
+plt.scatter(X_test[:, 0], X_test[:, 1], c = colmap[Y_test], s = 150, marker = 'o', alpha = 0.5)
+plt.scatter(X_test[:, 0], X_test[:, 1], c = colmap[Y_predict], s = 50, marker = 'o', alpha = 0.5)
+plt.xlabel('Sepal length', fontsize = 12)
+plt.ylabel('Petal length', fontsize = 12)
+plt.show()
